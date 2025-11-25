@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment {
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     private final Handler refreshHandler = new Handler();
-    private static final long refreshInterval = 120000;
+    private static final long refreshInterval = 300000;
 
     private final Handler timeAgoHandler = new Handler();
     private long lastUpdatedMillis = 0;
