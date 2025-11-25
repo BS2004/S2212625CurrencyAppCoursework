@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <LinearLayout
+        android:id="@+id/listItemText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@android:color/white"
+        android:elevation="3dp"
+        android:layout_margin="4dp"
+        android:clipToPadding="false">
+
+        <ImageView
+            android:id="@+id/flagImage"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="12dp"
+            android:contentDescription="Country flag"/>
+
+
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GBP/USD"
+            />
+
+        <TextView
+            android:id="@+id/rateText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1 GBP = 1.2345 USD"
+            />
+
+        <TextView
+            android:id="@+id/dateText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fri Nov 21 2025 6:04:03 UTC"
+            />
+
+    </LinearLayout>
+</LinearLayout>
+
