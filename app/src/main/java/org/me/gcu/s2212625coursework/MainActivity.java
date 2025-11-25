@@ -11,6 +11,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.mainToolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setTitle("Currency Converter App");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Currency Converter App");
 
         ft.commit();
     }
