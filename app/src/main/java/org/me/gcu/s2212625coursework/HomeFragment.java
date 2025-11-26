@@ -24,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -129,26 +130,44 @@ public class HomeFragment extends Fragment {
             Log.d("RSS_DEBUG", "Downloading " + RSS_URL);
 
             try {
-                URL url = new URL(RSS_URL);
 
-                BufferedReader reader;
-                try {
-                    InputStream inputStream = url.openConnection().getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(inputStream));
-                } catch (Exception e) {
-                    showError("RSS feed unavailable. Please try again later.");
+                URL url = new URL(RSS_URL);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+                conn.setReadTimeout(5000);
+                conn.connect();
+
+                int status = conn.getResponseCode();
+                if (status != HttpURLConnection.HTTP_OK) {
+                    showError("RSS feed unavailable (HTTP " + status + "). Please try again later.");
                     return;
                 }
 
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(conn.getInputStream(), "UTF-8")
+                );
+
                 StringBuilder builder = new StringBuilder();
                 String line;
-                while ((line = reader.readLine()) != null) builder.append(line);
-                reader.close();
+                while ((line = reader.readLine()) != null)
+                    builder.append(line).append("\n");
 
-                String xmlData = builder.toString();
+                reader.close();
+                conn.disconnect();
+
+                String xmlData = builder.toString().trim();
+
+                if (!xmlData.startsWith("<?xml")) {
+                    showError("Invalid RSS feed returned.");
+                    return;
+                }
 
                 int start = xmlData.indexOf("<?xml");
-                if (start > 0) xmlData = xmlData.substring(start);
+                if (start > 0) {
+                    xmlData = xmlData.substring(start);
+                }
 
                 xmlData = cleanUpXml(xmlData);
 
@@ -169,7 +188,9 @@ public class HomeFragment extends Fragment {
                     Toast.makeText(requireContext(), "Rates updated", Toast.LENGTH_SHORT).show();
                 });
 
-            } catch (Exception ignored) {}
+            } catch (Exception e) {
+                showError("RSS feed unavailable. Please try again later.");
+            }
         }
     }
 
